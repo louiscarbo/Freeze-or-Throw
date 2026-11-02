@@ -5,7 +5,7 @@ Course project for *Entretenimiento y Videojuegos* (ETSIInf, 2026-27).
 
 | | |
 |---|---|
-| Engine | **Unity 6.3 LTS** (exact patch: see `ProjectSettings/ProjectVersion.txt`) |
+| Engine | **Unity 6000.3.23f1** (6.3 LTS). Use exactly this version. |
 | Template | Universal 3D (URP) |
 | Input | Input System package |
 | UI | uGUI + TextMeshPro |
@@ -16,9 +16,10 @@ Course project for *Entretenimiento y Videojuegos* (ETSIInf, 2026-27).
 
 ## 1. First-time setup (everyone)
 
-1. Install **Unity Hub**, then the **exact Unity version** listed in `ProjectSettings/ProjectVersion.txt`
-   (Hub → Installs → Install Editor → Archive if it's not in the list). A different patch makes Unity
-   rewrite files and creates noisy diffs.
+1. Install **Unity Hub**, then Unity **6000.3.23f1** exactly (Hub → Installs → Install Editor; if that
+   patch isn't listed, open the [Unity download archive](https://unity.com/releases/editor/archive), find
+   6000.3.23f1 and click "Install with Unity Hub"). A different patch makes Unity rewrite files and creates
+   noisy diffs. If someone ever upgrades, they update this line and `ProjectSettings/ProjectVersion.txt` in the same PR.
 2. Install **Git LFS** and enable it once per machine:
    ```bash
    # macOS
@@ -29,7 +30,7 @@ Course project for *Entretenimiento y Videojuegos* (ETSIInf, 2026-27).
    GitHub Desktop users: it handles LFS for you.
 3. Clone the repo:
    ```bash
-   git clone https://github.com/<owner>/<repo>.git
+   git clone https://github.com/louiscarbo/Freeze-or-Throw.git
    ```
 4. Unity Hub → **Add → Add project from disk** → pick the cloned folder. The first open takes a few
    minutes (Unity rebuilds `Library/`).
@@ -78,19 +79,19 @@ Unity's own text files (`.unity .prefab .mat .asset .meta`) stay in normal git s
 ## 4. Smart Merge (UnityYAMLMerge)
 
 Scenes and prefabs are big YAML files. `.gitattributes` routes them through Unity's merge tool, but each
-person must tell git where that tool is. Run once (replace `<version>` with the one in `ProjectVersion.txt`):
+person must tell git where that tool is. Run once (paths assume Unity Hub's default install location):
 
 **macOS**
 ```bash
 git config --global merge.unityyamlmerge.name "Unity SmartMerge"
-git config --global merge.unityyamlmerge.driver "'/Applications/Unity/Hub/Editor/<version>/Unity.app/Contents/Tools/UnityYAMLMerge' merge -h -p --force %O %B %A %A"
+git config --global merge.unityyamlmerge.driver "'/Applications/Unity/Hub/Editor/6000.3.23f1/Unity.app/Contents/Tools/UnityYAMLMerge' merge -h -p --force %O %B %A %A"
 git config --global merge.unityyamlmerge.recursive binary
 ```
 
 **Windows** (Git Bash)
 ```bash
 git config --global merge.unityyamlmerge.name "Unity SmartMerge"
-git config --global merge.unityyamlmerge.driver "'C:/Program Files/Unity/Hub/Editor/<version>/Editor/Data/Tools/UnityYAMLMerge.exe' merge -h -p --force %O %B %A %A"
+git config --global merge.unityyamlmerge.driver "'C:/Program Files/Unity/Hub/Editor/6000.3.23f1/Editor/Data/Tools/UnityYAMLMerge.exe' merge -h -p --force %O %B %A %A"
 git config --global merge.unityyamlmerge.recursive binary
 ```
 
