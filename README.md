@@ -60,6 +60,7 @@ Assets/
     Settings/      URP assets, physics materials
   Photon/          (added in December)
 SourceArt/         Optional: .blend / source files. NEVER inside Assets/.
+Tools/             Scripts that run outside Unity (e.g. normalize_ui_sprites.py).
 ```
 
 The `.gitkeep` files only exist so git keeps empty folders. Leave them; Unity ignores them.
@@ -160,12 +161,15 @@ Build order (File → Build Profiles → Scene List): `Menu` first, then `Game`.
 
 ## 9. UI conventions
 
-Designs come from the Figma file (final page: *Final UI – Fireside cabin*).
+Designs come from the [Figma file](https://www.figma.com/design/fkOya9twT2hDNvs8RKth4b/Freeze-or-throw) (final page: *Final UI – Fireside cabin*, sprites on *Export – Unity sprites*).
 
-- **uGUI** (Canvas + Image + Button) with **TextMeshPro** text, font **Baloo 2** (Medium / Bold / ExtraBold) in `Art/UI/Fonts/`.
-- Canvas Scaler: *Scale With Screen Size*, reference **1512 × 982**, match **Height** (1).
-- Export sprites from Figma as **PNG @2x**. Import as *Sprite (2D and UI)*, Mesh Type *Full Rect*, compression off or high quality.
+- **uGUI** (Canvas + Image + Button) with **TextMeshPro** text, font **Baloo 2** (Medium / Bold / ExtraBold) in `Art/UI/Fonts/`. Font assets are **Static**: `.asset` files stay in normal git, and a Dynamic atlas would rewrite itself into a huge diff.
+- Canvas Scaler: *Scale With Screen Size*, reference **1512 × 982**, match **Height** (1). Use the `UiCanvas` prefab, which already includes the EventSystem with the Input System UI module.
+- Export sprites from Figma as **PNG @2x** (icons @4x). `UiSpriteImporter` sets everything when a new PNG lands in `Art/UI/`: *Sprite (2D and UI)*, *Full Rect*, high quality compression, and Pixels Per Unit **200** (icons 400), so Set Native Size gives the Figma size. Leave Pixels Per Unit Multiplier at 1.
 - Use **9-slice** (Sprite Editor borders + Image Type *Sliced*) for panels and buttons so they stretch cleanly.
+- **Shadows are inside the PNG**, so a sprite is bigger than its button. Keep the Figma size on the root, and put the Image on a child that grows past it by the shadow padding, with the same values in Raycast Padding. The button prefabs show the pattern.
+- **Sprites that swap** (button states and the like) must share one canvas or the button jumps. After re-exporting one, run `Tools/normalize_ui_sprites.py` on the fresh export.
+- **Dark overlays need more alpha than in Figma.** The project renders in Linear and Figma blends in sRGB: Figma's 0.6 is 0.8 in Unity, and 0.8 is 0.93.
 - Keep text out of button images: put the label in a TMP child so it can change and be translated.
 - Each screen is a prefab in `Prefabs/UI/`, so `Menu.unity` and `Game.unity` only hold instances.
 
