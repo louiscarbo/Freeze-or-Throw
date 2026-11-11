@@ -89,7 +89,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     ""name"": ""PlayerControls"",
     ""maps"": [
         {
-            ""name"": ""Player"",
+            ""name"": ""Standard"",
             ""id"": ""1b008a34-1f24-4daf-a396-5a7505b1b909"",
             ""actions"": [
                 {
@@ -244,22 +244,143 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Rolling"",
+            ""id"": ""a5a65b01-90f3-4887-90ff-8cb43a11ab3a"",
+            ""actions"": [
+                {
+                    ""name"": ""TankMove"",
+                    ""type"": ""Value"",
+                    ""id"": ""71bddb84-68f1-414b-9989-4f9c0ddf5206"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true,
+                    ""priority"": 0
+                },
+                {
+                    ""name"": ""Drop"",
+                    ""type"": ""Button"",
+                    ""id"": ""600f1a4c-36d5-4ed0-aeed-42d791e0a788"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false,
+                    ""priority"": 0
+                },
+                {
+                    ""name"": ""ThrowForward"",
+                    ""type"": ""Button"",
+                    ""id"": ""2a32480f-a13b-4282-96a6-e230f0ead7f4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false,
+                    ""priority"": 0
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""ac4624e6-73f4-481b-93ad-0056dd79c7ba"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TankMove"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""3be46d2d-5c55-4bcb-8e68-2f385ed70ad7"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TankMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""909e4427-042b-4180-8332-9370d7035435"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TankMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""1d249d35-4396-4e95-862c-01d1b4876508"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TankMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""83b39ad7-daae-4fa9-9985-cc7b185fdc51"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TankMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2dc365b3-0df7-43e5-a35c-960dc0c3d799"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8c8c6c1d-d54c-4346-8b61-905d413926d8"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThrowForward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
 }");
-        // Player
-        m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-        m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
-        m_Player_Create = m_Player.FindAction("Create", throwIfNotFound: true);
-        m_Player_GrabDrop = m_Player.FindAction("GrabDrop", throwIfNotFound: true);
-        m_Player_PushThrow = m_Player.FindAction("PushThrow", throwIfNotFound: true);
+        // Standard
+        m_Standard = asset.FindActionMap("Standard", throwIfNotFound: true);
+        m_Standard_Move = m_Standard.FindAction("Move", throwIfNotFound: true);
+        m_Standard_Aim = m_Standard.FindAction("Aim", throwIfNotFound: true);
+        m_Standard_Create = m_Standard.FindAction("Create", throwIfNotFound: true);
+        m_Standard_GrabDrop = m_Standard.FindAction("GrabDrop", throwIfNotFound: true);
+        m_Standard_PushThrow = m_Standard.FindAction("PushThrow", throwIfNotFound: true);
+        // Rolling
+        m_Rolling = asset.FindActionMap("Rolling", throwIfNotFound: true);
+        m_Rolling_TankMove = m_Rolling.FindAction("TankMove", throwIfNotFound: true);
+        m_Rolling_Drop = m_Rolling.FindAction("Drop", throwIfNotFound: true);
+        m_Rolling_ThrowForward = m_Rolling.FindAction("ThrowForward", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
     {
-        UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, PlayerControls.Player.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Standard.enabled, "This will cause a leak and performance issues, PlayerControls.Standard.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Rolling.enabled, "This will cause a leak and performance issues, PlayerControls.Rolling.Disable() has not been called.");
     }
 
     /// <summary>
@@ -332,49 +453,49 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // Player
-    private readonly InputActionMap m_Player;
-    private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
-    private readonly InputAction m_Player_Move;
-    private readonly InputAction m_Player_Aim;
-    private readonly InputAction m_Player_Create;
-    private readonly InputAction m_Player_GrabDrop;
-    private readonly InputAction m_Player_PushThrow;
+    // Standard
+    private readonly InputActionMap m_Standard;
+    private List<IStandardActions> m_StandardActionsCallbackInterfaces = new List<IStandardActions>();
+    private readonly InputAction m_Standard_Move;
+    private readonly InputAction m_Standard_Aim;
+    private readonly InputAction m_Standard_Create;
+    private readonly InputAction m_Standard_GrabDrop;
+    private readonly InputAction m_Standard_PushThrow;
     /// <summary>
-    /// Provides access to input actions defined in input action map "Player".
+    /// Provides access to input actions defined in input action map "Standard".
     /// </summary>
-    public struct PlayerActions
+    public struct StandardActions
     {
         private @PlayerControls m_Wrapper;
 
         /// <summary>
         /// Construct a new instance of the input action map wrapper class.
         /// </summary>
-        public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public StandardActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         /// <summary>
-        /// Provides access to the underlying input action "Player/Move".
+        /// Provides access to the underlying input action "Standard/Move".
         /// </summary>
-        public InputAction @Move => m_Wrapper.m_Player_Move;
+        public InputAction @Move => m_Wrapper.m_Standard_Move;
         /// <summary>
-        /// Provides access to the underlying input action "Player/Aim".
+        /// Provides access to the underlying input action "Standard/Aim".
         /// </summary>
-        public InputAction @Aim => m_Wrapper.m_Player_Aim;
+        public InputAction @Aim => m_Wrapper.m_Standard_Aim;
         /// <summary>
-        /// Provides access to the underlying input action "Player/Create".
+        /// Provides access to the underlying input action "Standard/Create".
         /// </summary>
-        public InputAction @Create => m_Wrapper.m_Player_Create;
+        public InputAction @Create => m_Wrapper.m_Standard_Create;
         /// <summary>
-        /// Provides access to the underlying input action "Player/GrabDrop".
+        /// Provides access to the underlying input action "Standard/GrabDrop".
         /// </summary>
-        public InputAction @GrabDrop => m_Wrapper.m_Player_GrabDrop;
+        public InputAction @GrabDrop => m_Wrapper.m_Standard_GrabDrop;
         /// <summary>
-        /// Provides access to the underlying input action "Player/PushThrow".
+        /// Provides access to the underlying input action "Standard/PushThrow".
         /// </summary>
-        public InputAction @PushThrow => m_Wrapper.m_Player_PushThrow;
+        public InputAction @PushThrow => m_Wrapper.m_Standard_PushThrow;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
-        public InputActionMap Get() { return m_Wrapper.m_Player; }
+        public InputActionMap Get() { return m_Wrapper.m_Standard; }
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
         public void Enable() { Get().Enable(); }
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
@@ -382,9 +503,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
         public bool enabled => Get().enabled;
         /// <summary>
-        /// Implicitly converts an <see ref="PlayerActions" /> to an <see ref="InputActionMap" /> instance.
+        /// Implicitly converts an <see ref="StandardActions" /> to an <see ref="InputActionMap" /> instance.
         /// </summary>
-        public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
+        public static implicit operator InputActionMap(StandardActions set) { return set.Get(); }
         /// <summary>
         /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
         /// </summary>
@@ -392,11 +513,11 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <remarks>
         /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
         /// </remarks>
-        /// <seealso cref="PlayerActions" />
-        public void AddCallbacks(IPlayerActions instance)
+        /// <seealso cref="StandardActions" />
+        public void AddCallbacks(IStandardActions instance)
         {
-            if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
+            if (instance == null || m_Wrapper.m_StandardActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_StandardActionsCallbackInterfaces.Add(instance);
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
@@ -420,8 +541,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <remarks>
         /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
         /// </remarks>
-        /// <seealso cref="PlayerActions" />
-        private void UnregisterCallbacks(IPlayerActions instance)
+        /// <seealso cref="StandardActions" />
+        private void UnregisterCallbacks(IStandardActions instance)
         {
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
@@ -441,12 +562,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         }
 
         /// <summary>
-        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />.
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="StandardActions.UnregisterCallbacks(IStandardActions)" />.
         /// </summary>
-        /// <seealso cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />
-        public void RemoveCallbacks(IPlayerActions instance)
+        /// <seealso cref="StandardActions.UnregisterCallbacks(IStandardActions)" />
+        public void RemoveCallbacks(IStandardActions instance)
         {
-            if (m_Wrapper.m_PlayerActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_StandardActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
@@ -456,27 +577,145 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <remarks>
         /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
         /// </remarks>
-        /// <seealso cref="PlayerActions.AddCallbacks(IPlayerActions)" />
-        /// <seealso cref="PlayerActions.RemoveCallbacks(IPlayerActions)" />
-        /// <seealso cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />
-        public void SetCallbacks(IPlayerActions instance)
+        /// <seealso cref="StandardActions.AddCallbacks(IStandardActions)" />
+        /// <seealso cref="StandardActions.RemoveCallbacks(IStandardActions)" />
+        /// <seealso cref="StandardActions.UnregisterCallbacks(IStandardActions)" />
+        public void SetCallbacks(IStandardActions instance)
         {
-            foreach (var item in m_Wrapper.m_PlayerActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_StandardActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_PlayerActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_StandardActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
     /// <summary>
-    /// Provides a new <see cref="PlayerActions" /> instance referencing this action map.
+    /// Provides a new <see cref="StandardActions" /> instance referencing this action map.
     /// </summary>
-    public PlayerActions @Player => new PlayerActions(this);
+    public StandardActions @Standard => new StandardActions(this);
+
+    // Rolling
+    private readonly InputActionMap m_Rolling;
+    private List<IRollingActions> m_RollingActionsCallbackInterfaces = new List<IRollingActions>();
+    private readonly InputAction m_Rolling_TankMove;
+    private readonly InputAction m_Rolling_Drop;
+    private readonly InputAction m_Rolling_ThrowForward;
     /// <summary>
-    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player" which allows adding and removing callbacks.
+    /// Provides access to input actions defined in input action map "Rolling".
     /// </summary>
-    /// <seealso cref="PlayerActions.AddCallbacks(IPlayerActions)" />
-    /// <seealso cref="PlayerActions.RemoveCallbacks(IPlayerActions)" />
-    public interface IPlayerActions
+    public struct RollingActions
+    {
+        private @PlayerControls m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public RollingActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Rolling/TankMove".
+        /// </summary>
+        public InputAction @TankMove => m_Wrapper.m_Rolling_TankMove;
+        /// <summary>
+        /// Provides access to the underlying input action "Rolling/Drop".
+        /// </summary>
+        public InputAction @Drop => m_Wrapper.m_Rolling_Drop;
+        /// <summary>
+        /// Provides access to the underlying input action "Rolling/ThrowForward".
+        /// </summary>
+        public InputAction @ThrowForward => m_Wrapper.m_Rolling_ThrowForward;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Rolling; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="RollingActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(RollingActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="RollingActions" />
+        public void AddCallbacks(IRollingActions instance)
+        {
+            if (instance == null || m_Wrapper.m_RollingActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_RollingActionsCallbackInterfaces.Add(instance);
+            @TankMove.started += instance.OnTankMove;
+            @TankMove.performed += instance.OnTankMove;
+            @TankMove.canceled += instance.OnTankMove;
+            @Drop.started += instance.OnDrop;
+            @Drop.performed += instance.OnDrop;
+            @Drop.canceled += instance.OnDrop;
+            @ThrowForward.started += instance.OnThrowForward;
+            @ThrowForward.performed += instance.OnThrowForward;
+            @ThrowForward.canceled += instance.OnThrowForward;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="RollingActions" />
+        private void UnregisterCallbacks(IRollingActions instance)
+        {
+            @TankMove.started -= instance.OnTankMove;
+            @TankMove.performed -= instance.OnTankMove;
+            @TankMove.canceled -= instance.OnTankMove;
+            @Drop.started -= instance.OnDrop;
+            @Drop.performed -= instance.OnDrop;
+            @Drop.canceled -= instance.OnDrop;
+            @ThrowForward.started -= instance.OnThrowForward;
+            @ThrowForward.performed -= instance.OnThrowForward;
+            @ThrowForward.canceled -= instance.OnThrowForward;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="RollingActions.UnregisterCallbacks(IRollingActions)" />.
+        /// </summary>
+        /// <seealso cref="RollingActions.UnregisterCallbacks(IRollingActions)" />
+        public void RemoveCallbacks(IRollingActions instance)
+        {
+            if (m_Wrapper.m_RollingActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="RollingActions.AddCallbacks(IRollingActions)" />
+        /// <seealso cref="RollingActions.RemoveCallbacks(IRollingActions)" />
+        /// <seealso cref="RollingActions.UnregisterCallbacks(IRollingActions)" />
+        public void SetCallbacks(IRollingActions instance)
+        {
+            foreach (var item in m_Wrapper.m_RollingActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_RollingActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="RollingActions" /> instance referencing this action map.
+    /// </summary>
+    public RollingActions @Rolling => new RollingActions(this);
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Standard" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="StandardActions.AddCallbacks(IStandardActions)" />
+    /// <seealso cref="StandardActions.RemoveCallbacks(IStandardActions)" />
+    public interface IStandardActions
     {
         /// <summary>
         /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
@@ -513,5 +752,34 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPushThrow(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Rolling" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="RollingActions.AddCallbacks(IRollingActions)" />
+    /// <seealso cref="RollingActions.RemoveCallbacks(IRollingActions)" />
+    public interface IRollingActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "TankMove" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTankMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Drop" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDrop(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ThrowForward" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnThrowForward(InputAction.CallbackContext context);
     }
 }
