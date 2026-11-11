@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody _rb;
 
     public float moveSpeed = 5f;
-    public float rotationSpeed = 1f;
+    public float rotationSpeed = 60f;
 
     private void Awake()
     {

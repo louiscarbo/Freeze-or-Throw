@@ -49,7 +49,7 @@ public class PlayerInputHandler : MonoBehaviour
             }
         };
 
-        controls.Standard.GrabDrop.performed += ctx => HandleStandardThrow();
+        controls.Standard.GrabDrop.performed += ctx => HandleStandardGrabDrop();
         controls.Standard.PushThrow.performed += ctx => HandleStandardPush();
 
         // ROLLING MAP BINDINGS
@@ -71,11 +71,43 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void SetState(PlayerState newState)
     {
-        return;
+        currentState = newState;
+        Debug.Log($"Player State changed to: {newState}");
+
+        if (newState == PlayerState.RollingSnowball)
+        {
+            controls.Standard.Disable();
+            controls.Rolling.Enable();
+        } else
+        {
+            controls.Standard.Enable();
+            controls.Rolling.Disable();
+        }
     }
 
-    private void HandleStandardThrow() { return; }
-    private void HandleStandardPush() { return; }
+    private void HandleStandardGrabDrop()
+    {
+        if (currentState == PlayerState.EmptyHanded)
+        {
+            // TODO: Grab nearby snowball logic
+            // If successful: SetState(PlayerState.RollingSnowball);
+        } else if (currentState == PlayerState.HoldingFreshSnowball)
+        {
+            // TODO: Destroy snowball logic
+            SetState(PlayerState.EmptyHanded);
+        }
+    }
+    private void HandleStandardPush()
+    {
+        if (currentState == PlayerState.EmptyHanded)
+        {
+            // TODO: Push player/object logic
+        } else if (currentState == PlayerState.HoldingFreshSnowball)
+        {
+            // TODO: Throw snowball at AimPosition logic
+            SetState(PlayerState.EmptyHanded);
+        }
+    }
 
     private void OnEnable() => controls.Standard.Enable();   // start with standard controls
     private void OnDisable() => controls.Disable();
