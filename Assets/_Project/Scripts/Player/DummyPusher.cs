@@ -10,6 +10,12 @@ public class DummyPusher : MonoBehaviour
     {
         if (Keyboard.current == null) return;
 
+        HandleMove();
+        HandleHold();
+    }
+
+    private void HandleMove()
+    {
         float moveX = 0f;
         float moveZ = 0f;
         if (Keyboard.current.dKey.isPressed) moveX += 1f;
@@ -19,5 +25,16 @@ public class DummyPusher : MonoBehaviour
 
         Vector3 move = new Vector3(moveX, 0, moveZ).normalized;
         transform.Translate(move*speed*Time.deltaTime);
+    }
+
+    private void HandleHold()
+    {
+        if (Keyboard.current.qKey.isPressed)
+        {
+            Snowball snowball = FindAnyObjectByType<Snowball>();
+            PlayerFreezeHandler frzHandler = gameObject.GetComponent<PlayerFreezeHandler>();
+            frzHandler.CurrentHeldRollball = snowball;
+            snowball.StartRolling(1);
+        }
     }
 }

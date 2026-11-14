@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8816935654468581901}
   - component: {fileID: 307029506975058619}
   - component: {fileID: 2372261986706600631}
-  - component: {fileID: 6148069462001895065}
+  - component: {fileID: 1880638105309025601}
   m_Layer: 0
   m_Name: Snowball
   m_TagString: Untagged
@@ -141,7 +141,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &6148069462001895065
+--- !u!114 &1880638105309025601
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3023626701288161584}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8d1ca3af54aa9d4984cd36cb04fdc32, type: 3}
+  m_Script: {fileID: 11500000, guid: 181d360b7bd2678449636e4c63156154, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Snowball
   _minSize: 0.3

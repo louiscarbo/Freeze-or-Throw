@@ -260,6 +260,7 @@ GameObject:
   - component: {fileID: 482675792}
   - component: {fileID: 482675797}
   - component: {fileID: 482675796}
+  - component: {fileID: 482675798}
   m_Layer: 0
   m_Name: DummyPusher
   m_TagString: Untagged
@@ -402,6 +403,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &482675798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482675791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc0464cecb8986345918e4ee4049f850, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerFreezeHandler
+  _maxFreezeTime: 3
+  _thawMult: 2
+  _freezeDuration: 2
+  CurrentHeldRollball: {fileID: 0}
 --- !u!1 &707990124
 GameObject:
   m_ObjectHideFlags: 0
@@ -652,24 +669,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1050113271 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3023626701288161584, guid: 8109120b02311234da0ca093935213eb, type: 3}
-  m_PrefabInstance: {fileID: 4656996789628758810}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1050113278
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1050113271}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 797cb3bb0f45ac84fb67dcaec6edb981, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DummyPusher
-  speed: 5
 --- !u!1 &1662296135
 GameObject:
   m_ObjectHideFlags: 0
@@ -757,10 +756,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3023626701288161584, guid: 8109120b02311234da0ca093935213eb, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1050113278}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8109120b02311234da0ca093935213eb, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
