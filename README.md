@@ -9,7 +9,7 @@ Course project for *Entretenimiento y Videojuegos* (ETSIInf, 2026-27).
 | Template | Universal 3D (URP) |
 | Input | Input System package |
 | UI | uGUI + TextMeshPro |
-| Multiplayer | Unity Netcode for GameObjects (NGO) 2.x, local network only, host + clients (added in December) |
+| Multiplayer | Unity Netcode for GameObjects (NGO) 2.x, local network only, host + clients (built in from the start) |
 | Team | Louis Carbo Estaque, Daniel Banegas, Elise Bachet, Onur Sen |
 
 ---
@@ -143,10 +143,11 @@ Each one is a small public method or event that one person writes and another ca
 | Power-ups affect other systems | Daniel / Elise | Onur | `Snowball.SetOwner(...)`, `SnowField.Freeze(area, seconds)`, `Snowman.SetOwner(...)`, `Snowman.Destroy()` |
 | Player identity and scarf color | Onur | everyone | player id + color (red, blue, green, yellow) |
 
-Writing code that converts to NGO easily: keep input reading separate from movement, keep game
-state in a few clear fields (size, owner, frozen, score), and avoid `static` singletons that hold state.
+Every feature is written networked from the start, with no offline version to convert later. Keep input reading
+separate from movement, keep game state in a few clear fields (size, owner, frozen, score), and avoid `static`
+singletons that hold state.
 
-Once networked, each player moves their own player and the **host** decides everything shared: snowball owner,
+Each player moves their own player and the **host** decides everything shared: snowball owner,
 steals, hits, snowmen, snow field, events, timer and score. Calls above that change shared state
 (`SetOwner`, `Melt`, `TakeSnow`, `Destroy`, the events) run on the host; other players ask for them through an RPC.
 Local network only: no internet play, no Unity Cloud, and if the host leaves, the match ends.
@@ -184,7 +185,7 @@ Designs come from the [Figma file](https://www.figma.com/design/fkOya9twT2hDNvs8
 | 6 Nov 2026 | Everyone can clone, open, push |
 | 17 Nov | Test exam 1 |
 | 18 Nov | Demo freeze on `main` |
-| 20 Nov | Preliminary presentation: offline prototype |
+| 20 Nov | Preliminary presentation: single-player prototype (one player hosting alone) |
 | 1 & 4 Dec | Course networking classes (Photon Fusion; we use NGO) |
 | 15 Dec | Test exam 2 (feature freeze before) |
 | 22 Dec | Final delivery: 4-player match over the local network, menus, sound, GDD v2 |
