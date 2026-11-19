@@ -1,6 +1,6 @@
 # Freeze or Throw
 
-4-player online top-down party game: roll snowballs, stack them into snowmen, sabotage everyone else.
+4-player local-network top-down party game: roll snowballs, stack them into snowmen, sabotage everyone else.
 Course project for *Entretenimiento y Videojuegos* (ETSIInf, 2026-27).
 
 | | |
@@ -9,7 +9,7 @@ Course project for *Entretenimiento y Videojuegos* (ETSIInf, 2026-27).
 | Template | Universal 3D (URP) |
 | Input | Input System package |
 | UI | uGUI + TextMeshPro |
-| Multiplayer | Photon Fusion 2, Shared Mode (added in December) |
+| Multiplayer | Unity Netcode for GameObjects (NGO) 2.x, local network only, host + clients (added in December) |
 | Team | Louis Carbo Estaque, Daniel Banegas, Elise Bachet, Onur Sen |
 
 ---
@@ -40,7 +40,7 @@ Course project for *Entretenimiento y Videojuegos* (ETSIInf, 2026-27).
 ## 2. Folder structure
 
 The Unity project is the repo root. All of **our** files live under `Assets/_Project/`.
-Third-party packages (Photon, Asset Store packs) stay in their own folders outside `_Project`.
+Third-party packages (Asset Store packs) stay in their own folders outside `_Project`.
 
 ```
 Assets/
@@ -58,7 +58,6 @@ Assets/
       Sandbox/     Louis.unity  Daniel.unity  Elise.unity  Onur.unity
     Scripts/       Core/  Player/  Snow/  Arena/  Events/  PowerUps/  Network/  UI/
     Settings/      URP assets, physics materials
-  Photon/          (added in December)
 SourceArt/         Optional: .blend / source files. NEVER inside Assets/.
 Tools/             Scripts that run outside Unity (e.g. normalize_ui_sprites.py).
 ```
@@ -127,7 +126,7 @@ Owner = the only person who edits those scripts, prefabs and scenes (not the onl
 | **Louis** | UI and menus; match manager (7-min timer, score, winner, respawn rule); later sound | UI prefabs (HUD, countdown, rankings), 2D icons/buttons, audio | `Menu.unity`, `Sandbox/Louis` |
 | **Daniel** | Player controls (move, tank controls while rolling, push, grab, drop); snowball (roll, grow, max size, freeze penalty, throw, stun); snowman building | Player, Snowball, Snowman prefabs; player model; Input Actions asset | `Sandbox/Daniel` |
 | **Elise** | Arena; snow field (grid, depletion, regen); water/holes ring-out; snowstorm and geyser events | Island model, obstacles, event prefabs | `Game.unity`, `Sandbox/Elise` |
-| **Onur** | Multiplayer (Photon Fusion), lobby connection, voice chat; power-ups | Network prefabs, power-up prefabs | `Sandbox/Onur` |
+| **Onur** | Multiplayer (NGO, host/join over local network), lobby connection, voice chat; power-ups | Network prefabs, power-up prefabs | `Sandbox/Onur` |
 
 Louis owns the repo and keeps `main` healthy. Architecture lead: _to confirm at the first meeting_.
 
@@ -144,8 +143,13 @@ Each one is a small public method or event that one person writes and another ca
 | Power-ups affect other systems | Daniel / Elise | Onur | `Snowball.SetOwner(...)`, `SnowField.Freeze(area, seconds)`, `Snowman.SetOwner(...)`, `Snowman.Destroy()` |
 | Player identity and scarf color | Onur | everyone | player id + color (red, blue, green, yellow) |
 
-Writing code that converts to Fusion easily: keep input reading separate from movement, keep game
+Writing code that converts to NGO easily: keep input reading separate from movement, keep game
 state in a few clear fields (size, owner, frozen, score), and avoid `static` singletons that hold state.
+
+Once networked, each player moves their own player and the **host** decides everything shared: snowball owner,
+steals, hits, snowmen, snow field, events, timer and score. Calls above that change shared state
+(`SetOwner`, `Melt`, `TakeSnow`, `Destroy`, the events) run on the host; other players ask for them through an RPC.
+Local network only: no internet play, no Unity Cloud, and if the host leaves, the match ends.
 
 ## 8. Scenes
 
@@ -181,6 +185,6 @@ Designs come from the [Figma file](https://www.figma.com/design/fkOya9twT2hDNvs8
 | 17 Nov | Test exam 1 |
 | 18 Nov | Demo freeze on `main` |
 | 20 Nov | Preliminary presentation: offline prototype |
-| 1 & 4 Dec | Photon Fusion classes |
+| 1 & 4 Dec | Course networking classes (Photon Fusion; we use NGO) |
 | 15 Dec | Test exam 2 (feature freeze before) |
-| 22 Dec | Final delivery: online 4-player match, menus, sound, GDD v2 |
+| 22 Dec | Final delivery: 4-player match over the local network, menus, sound, GDD v2 |

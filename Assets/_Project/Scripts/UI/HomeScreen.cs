@@ -27,7 +27,7 @@ namespace FreezeOrThrow.UI
             SceneManager.LoadScene(gameSceneName);
         }
 
-        // Join needs Photon Fusion (December) and Options is the next screen to build.
+        // Join needs networking (December) and Options is the next screen to build.
         void OpenJoin()
         {
             Debug.Log("Join game screen is not built yet.");
