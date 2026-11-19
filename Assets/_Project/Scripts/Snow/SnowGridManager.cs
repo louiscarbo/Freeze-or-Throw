@@ -5,24 +5,26 @@ public class SnowGridManager : NetworkBehaviour
 {
     public static SnowGridManager Instance { get; private set; }
 
-    [Header("Arena References")]
-    [Tooltip("Drag your 50x50 stretched Arena floor Cube/Plane here")]
-    [SerializeField] private Renderer arenaRenderer;
-
     [Header("Grid Settings")]
-    [Tooltip("Size of each snow square in meters (2m = 25x25 grid on a 50x50 floor)")]
-    [SerializeField] private float cellSize = 2f;
-    [SerializeField] private float maxSnowPerCell = 100f;
+    [SerializeField] private int gridWidth = 55;
+    [SerializeField] private int gridHeight = 55;
+    [SerializeField] private float arenaWorldSize = 55f;
+    [SerializeField] private float maxSnowPerCell = 10f;
 
-    [Header("Visual Colors")]
+    [Header("Radial Snow Distribution")]
+    [Range(0f, 1f)]
+    [SerializeField] private float edgeSnowMultiplier = 0.15f; // 15% snow at outer edges (0 = bare ice at edges)
+    [SerializeField] private float falloffSharpness = 1.5f;    // Higher = deeper snow concentrated closer to center
+
+    [Header("Visual Quad Reference")]
+    [SerializeField] private MeshRenderer snowQuadRenderer;
     [SerializeField] private Color fullSnowColor = Color.white;
-    [SerializeField] private Color depletedGroundColor = new Color(0.35f, 0.32f, 0.30f);
+    [SerializeField] private Color emptyGroundColor = new Color(0.25f, 0.35f, 0.45f, 0f);
 
-    private int gridWidth;
-    private int gridDepth;
-    private float[,] snowGrid;
-    private Vector3 arenaMinCorner;
-    private Texture2D snowMaskTexture;
+    private float[,] _snowGrid;
+    private Texture2D _snowTexture;
+    private Color[] _pixels;
+    private bool _textureDirty = false;
 
     private void Awake()
     {
@@ -32,144 +34,125 @@ public class SnowGridManager : NetworkBehaviour
             return;
         }
         Instance = this;
-        InitializeGrid();
+
+        InitGridAndTexture();
     }
 
-    private void InitializeGrid()
+    private void InitGridAndTexture()
     {
-        Bounds bounds = arenaRenderer.bounds;
-        arenaMinCorner = new Vector3(bounds.min.x, bounds.center.y, bounds.min.z);
+        if (gridWidth <= 0) gridWidth = 55;
+        if (gridHeight <= 0) gridHeight = 55;
+        if (arenaWorldSize <= 0f) arenaWorldSize = 55f;
+        if (maxSnowPerCell <= 0f) maxSnowPerCell = 10f;
 
-        gridWidth = Mathf.Max(1, Mathf.RoundToInt(bounds.size.x / cellSize));
-        gridDepth = Mathf.Max(1, Mathf.RoundToInt(bounds.size.z / cellSize));
-
-        snowGrid = new float[gridWidth, gridDepth];
-
-        // Create a lightweight runtime texture matching the grid resolution
-        snowMaskTexture = new Texture2D(gridWidth, gridDepth, TextureFormat.RGBA32, false);
-        snowMaskTexture.filterMode = FilterMode.Bilinear;
-        snowMaskTexture.wrapMode = TextureWrapMode.Clamp;
-
-        for (int x = 0; x < gridWidth; x++)
+        _snowGrid = new float[gridWidth, gridHeight];
+        _snowTexture = new Texture2D(gridWidth, gridHeight, TextureFormat.RGBA32, false)
         {
-            for (int z = 0; z < gridDepth; z++)
+            filterMode = FilterMode.Bilinear,
+            wrapMode = TextureWrapMode.Clamp
+        };
+        _pixels = new Color[gridWidth * gridHeight];
+
+        Vector2 center = new Vector2((gridWidth - 1) * 0.5f, (gridHeight - 1) * 0.5f);
+        float maxRadius = Mathf.Max(center.x, center.y);
+
+        for (int z = 0; z < gridHeight; z++)
+        {
+            for (int x = 0; x < gridWidth; x++)
             {
-                snowGrid[x, z] = maxSnowPerCell;
-                snowMaskTexture.SetPixel(x, z, fullSnowColor);
+                // 0 at exact center, 1 at outer border (clamped for corners)
+                float normalizedDist = Mathf.Clamp01(Vector2.Distance(new Vector2(x, z), center) / maxRadius);
+
+                // 1 at center -> edgeSnowMultiplier at the outer edge
+                float radialFactor = Mathf.Lerp(1f, edgeSnowMultiplier, Mathf.Pow(normalizedDist, falloffSharpness));
+                float initialSnow = maxSnowPerCell * radialFactor;
+
+                _snowGrid[x, z] = initialSnow;
+
+                float colorT = Mathf.Clamp01(initialSnow / maxSnowPerCell);
+                _pixels[z * gridWidth + x] = Color.Lerp(emptyGroundColor, fullSnowColor, colorT);
             }
         }
 
-        snowMaskTexture.Apply();
-        arenaRenderer.material.mainTexture = snowMaskTexture;
+        _snowTexture.SetPixels(_pixels);
+        _snowTexture.Apply();
+
+        if (snowQuadRenderer != null)
+        {
+            snowQuadRenderer.material.mainTexture = _snowTexture;
+            snowQuadRenderer.material.SetTexture("_BaseMap", _snowTexture);
+        }
     }
 
-    /// <summary>
-    /// Converts a world position into (gridX, gridZ) coordinates.
-    /// Returns false if the position is outside the arena floor.
-    /// </summary>
-    public bool WorldToGrid(Vector3 worldPos, out int gridX, out int gridZ)
+    private void LateUpdate()
     {
-        gridX = Mathf.FloorToInt((worldPos.x - arenaMinCorner.x) / cellSize);
-        gridZ = Mathf.FloorToInt((worldPos.z - arenaMinCorner.z) / cellSize);
-
-        return gridX >= 0 && gridX < gridWidth && gridZ >= 0 && gridZ < gridDepth;
+        if (_textureDirty && _snowTexture != null)
+        {
+            _snowTexture.SetPixels(_pixels);
+            _snowTexture.Apply();
+            _textureDirty = false;
+        }
     }
 
-    /// <summary>
-    /// Called by a rolling snowball to collect snow at its current world position.
-    /// Returns the actual amount of snow collected.
-    /// </summary>
     public float ConsumeSnowAt(Vector3 worldPos, float requestedAmount)
     {
-        if (!WorldToGrid(worldPos, out int x, out int z))
+        if (!IsServer) return 0f;
+
+        if (!WorldToGrid(worldPos, out int cx, out int cz))
             return 0f;
 
-        float available = snowGrid[x, z];
-        if (available <= 0f)
-            return 0f;
+        float totalCollected = 0f;
 
-        float taken = Mathf.Min(available, requestedAmount);
-
-        if (IsServer)
+        for (int dz = -1; dz <= 1; dz++)
         {
-            ApplySnowChange(x, z, available - taken);
-            UpdateCellClientRpc(x, z, snowGrid[x, z]);
-        }
-        else if (IsClient)
-        {
-            RequestConsumeSnowServerRpc(x, z, requestedAmount);
-        }
-
-        return taken;
-    }
-
-    /// <summary>
-    /// Refills snow across the entire arena (call this during a Snowstorm event).
-    /// </summary>
-    public void RegenerateAllSnow(float amountToAdd)
-    {
-        if (!IsServer) return;
-
-        for (int x = 0; x < gridWidth; x++)
-        {
-            for (int z = 0; z < gridDepth; z++)
+            for (int dx = -1; dx <= 1; dx++)
             {
-                if (snowGrid[x, z] < maxSnowPerCell)
-                {
-                    float newValue = Mathf.Min(maxSnowPerCell, snowGrid[x, z] + amountToAdd);
-                    ApplySnowChange(x, z, newValue);
-                }
+                int gx = cx + dx;
+                int gz = cz + dz;
+
+                if (gx < 0 || gx >= gridWidth || gz < 0 || gz >= gridHeight)
+                    continue;
+
+                float available = _snowGrid[gx, gz];
+                if (available <= 0f) continue;
+
+                float taken = Mathf.Min(available, requestedAmount);
+                _snowGrid[gx, gz] -= taken;
+                totalCollected += taken;
+
+                UpdateCellPixel(gx, gz);
+                UpdateCellClientRpc(gx, gz, _snowGrid[gx, gz]);
             }
         }
 
-        snowMaskTexture.Apply();
-        RegenerateAllClientRpc(amountToAdd);
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void RequestConsumeSnowServerRpc(int x, int z, float requestedAmount)
-    {
-        if (x < 0 || x >= gridWidth || z < 0 || z >= gridDepth) return;
-
-        float available = snowGrid[x, z];
-        if (available <= 0f) return;
-
-        float newValue = Mathf.Max(0f, available - requestedAmount);
-        ApplySnowChange(x, z, newValue);
-        UpdateCellClientRpc(x, z, newValue);
+        return totalCollected;
     }
 
     [ClientRpc]
-    private void UpdateCellClientRpc(int x, int z, float newValue)
-    {
-        if (IsServer) return; // Server already updated locally
-        ApplySnowChange(x, z, newValue);
-    }
-
-    [ClientRpc]
-    private void RegenerateAllClientRpc(float amountToAdd)
+    private void UpdateCellClientRpc(int x, int z, float newSnowAmount)
     {
         if (IsServer) return;
 
-        for (int x = 0; x < gridWidth; x++)
-        {
-            for (int z = 0; z < gridDepth; z++)
-            {
-                if (snowGrid[x, z] < maxSnowPerCell)
-                {
-                    float newValue = Mathf.Min(maxSnowPerCell, snowGrid[x, z] + amountToAdd);
-                    ApplySnowChange(x, z, newValue);
-                }
-            }
-        }
-        snowMaskTexture.Apply();
+        _snowGrid[x, z] = newSnowAmount;
+        UpdateCellPixel(x, z);
     }
 
-    private void ApplySnowChange(int x, int z, float newValue)
+    private void UpdateCellPixel(int x, int z)
     {
-        snowGrid[x, z] = newValue;
-        float ratio = newValue / maxSnowPerCell;
-        snowMaskTexture.SetPixel(x, z, Color.Lerp(depletedGroundColor, fullSnowColor, ratio));
-        snowMaskTexture.Apply();
+        float t = Mathf.Clamp01(_snowGrid[x, z] / maxSnowPerCell);
+        _pixels[z * gridWidth + x] = Color.Lerp(emptyGroundColor, fullSnowColor, t);
+        _textureDirty = true;
+    }
+
+    private bool WorldToGrid(Vector3 worldPos, out int gx, out int gz)
+    {
+        float halfSize = arenaWorldSize * 0.5f;
+        float normX = (worldPos.x + halfSize) / arenaWorldSize;
+        float normZ = (worldPos.z + halfSize) / arenaWorldSize;
+
+        gx = Mathf.FloorToInt(normX * gridWidth);
+        gz = Mathf.FloorToInt(normZ * gridHeight);
+
+        return gx >= 0 && gx < gridWidth && gz >= 0 && gz < gridHeight;
     }
 }
