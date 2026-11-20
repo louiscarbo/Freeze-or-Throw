@@ -1,12 +1,16 @@
 using Unity.Netcode;
+using UnityEngine;
 
 namespace FreezeOrThrow.Core
 {
     public class MatchState : NetworkBehaviour
     {
         public const int PlayerCount = 4;
-        const double MatchDurationSeconds = 420;
 
+        [SerializeField] double countdownSeconds = 3;
+        [SerializeField] double matchDurationSeconds = 420;
+
+        readonly NetworkVariable<double> startServerTime = new NetworkVariable<double>();
         readonly NetworkVariable<double> endServerTime = new NetworkVariable<double>();
         readonly NetworkList<int> scores = new NetworkList<int>();
 
@@ -17,7 +21,8 @@ namespace FreezeOrThrow.Core
             scores.OnListChanged += HandleScoresChanged;
             if (IsServer)
             {
-                endServerTime.Value = NetworkManager.ServerTime.Time + MatchDurationSeconds;
+                startServerTime.Value = NetworkManager.ServerTime.Time + countdownSeconds;
+                endServerTime.Value = startServerTime.Value + matchDurationSeconds;
                 for (int playerSlot = 0; playerSlot < PlayerCount; playerSlot++)
                 {
                     scores.Add(0);
@@ -46,11 +51,30 @@ namespace FreezeOrThrow.Core
                     return 0f;
                 }
 
-                return (float)System.Math.Max(0, endServerTime.Value - NetworkManager.ServerTime.Time);
+                double untilEnd = endServerTime.Value - NetworkManager.ServerTime.Time;
+                double matchLength = endServerTime.Value - startServerTime.Value;
+                return (float)System.Math.Max(0, System.Math.Min(untilEnd, matchLength));
             }
         }
 
+        public float CountdownSecondsLeft
+        {
+            get
+            {
+                if (!IsSpawned)
+                {
+                    return 0f;
+                }
+
+                return (float)System.Math.Max(0, startServerTime.Value - NetworkManager.ServerTime.Time);
+            }
+        }
+
+        public bool HasStarted => IsSpawned && CountdownSecondsLeft <= 0f;
+
         public bool HasEnded => IsSpawned && SecondsLeft <= 0f;
+
+        public bool IsPlaying => HasStarted && !HasEnded;
 
         public int ScoreOf(int playerSlot)
         {
@@ -59,12 +83,27 @@ namespace FreezeOrThrow.Core
 
         public void AddPoint(int playerSlot)
         {
-            if (!IsServer || HasEnded)
+            if (!IsServer || !IsPlaying)
             {
                 return;
             }
 
             scores[playerSlot] += 1;
+        }
+
+        public int RankOf(int playerSlot)
+        {
+            int ownScore = ScoreOf(playerSlot);
+            int rank = 1;
+            for (int otherSlot = 0; otherSlot < PlayerCount; otherSlot++)
+            {
+                if (ScoreOf(otherSlot) > ownScore)
+                {
+                    rank++;
+                }
+            }
+
+            return rank;
         }
     }
 }

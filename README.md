@@ -146,7 +146,7 @@ Each one is a small public method or event that one person writes and another ca
 | Player identity and scarf color | Onur | everyone | player id + color (red, blue, green, yellow) |
 | Start, join or leave a match | Louis | Louis (menus), Onur (lobby) | `SessionLauncher.Host(sceneName)`, `SessionLauncher.Join(hostAddress)`, `SessionLauncher.Leave()` |
 | Players appear when the game scene starts | Louis | everyone | `PlayerSpawner` prefab in the game scene (host spawns one player per connected client) |
-| Time left and scores | Louis | Louis (HUD, Rankings) | `MatchState.SecondsLeft`, `MatchState.HasEnded`, `MatchState.ScoreOf(playerSlot)`, event `ScoresChanged` |
+| Time left and scores | Louis | Louis (HUD, Rankings) | `MatchState.SecondsLeft`, `MatchState.HasEnded`, `MatchState.ScoreOf(playerSlot)`, `MatchState.CountdownSecondsLeft`, `MatchState.IsPlaying`, `MatchState.RankOf(playerSlot)`, event `ScoresChanged` |
 
 Dependencies point one way: **screens → match → world**. Screens (menus, HUD) read `MatchState` and call `SessionLauncher`.
 The match (`MatchState`, `PlayerSpawner`) spawns into the world and listens to its events. The world (player, snowball,
