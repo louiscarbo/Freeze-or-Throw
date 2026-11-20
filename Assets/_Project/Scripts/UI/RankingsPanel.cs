@@ -82,10 +82,6 @@ namespace FreezeOrThrow.UI
                 Sprite pawnSprite = pawnSpritesByPlayer[playerSlot];
                 row.pawnImage.gameObject.SetActive(pawnSprite != null);
                 row.pawnImage.sprite = pawnSprite;
-                if (pawnSprite != null)
-                {
-                    row.pawnImage.SetNativeSize();
-                }
             }
 
             ShowColour(row.colourImage, placeIndex, playerSlot);
