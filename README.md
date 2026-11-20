@@ -147,6 +147,7 @@ Each one is a small public method or event that one person writes and another ca
 | Start, join or leave a match | Louis | Louis (menus), Onur (lobby) | `SessionLauncher.Host(sceneName)`, `SessionLauncher.Join(hostAddress)`, `SessionLauncher.Leave()` |
 | Players appear when the game scene starts | Louis | everyone | `PlayerSpawner` prefab in the game scene (host spawns one player per connected client) |
 | Time left and scores | Louis | Louis (HUD, Rankings) | `MatchState.SecondsLeft`, `MatchState.HasEnded`, `MatchState.ScoreOf(playerSlot)`, `MatchState.CountdownSecondsLeft`, `MatchState.IsPlaying`, `MatchState.RankOf(playerSlot)`, event `ScoresChanged` |
+| Device settings (volumes) | Louis | Louis (Options), whoever adds sound and voice chat | `Settings.MusicVolume`, `Settings.SoundEffectsVolume`, `Settings.VoiceChatVolume` (0 to 1, saved on the device, never networked) |
 
 Dependencies point one way: **screens → match → world**. Screens (menus, HUD) read `MatchState` and call `SessionLauncher`.
 The match (`MatchState`, `PlayerSpawner`) spawns into the world and listens to its events. The world (player, snowball,
