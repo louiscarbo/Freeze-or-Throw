@@ -146,6 +146,12 @@ Each one is a small public method or event that one person writes and another ca
 | Player identity and scarf color | Onur | everyone | player id + color (red, blue, green, yellow) |
 | Start, join or leave a match | Louis | Louis (menus), Onur (lobby) | `SessionLauncher.Host(sceneName)`, `SessionLauncher.Join(hostAddress)`, `SessionLauncher.Leave()` |
 | Players appear when the game scene starts | Louis | everyone | `PlayerSpawner` prefab in the game scene (host spawns one player per connected client) |
+| Time left and scores | Louis | Louis (HUD, Rankings) | `MatchState.SecondsLeft`, `MatchState.HasEnded`, `MatchState.ScoreOf(playerSlot)`, event `ScoresChanged` |
+
+Dependencies point one way: **screens → match → world**. Screens (menus, HUD) read `MatchState` and call `SessionLauncher`.
+The match (`MatchState`, `PlayerSpawner`) spawns into the world and listens to its events. The world (player, snowball,
+snow, snowman, events, power-ups) never references the match or a screen: it raises an event such as `OnSnowmanBuilt`
+and the match adds the point. If a change needs the world to call the match, raise an event instead.
 
 Every feature is written networked from the start, with no offline version to convert later. Keep input reading
 separate from movement, keep game state in a few clear fields (size, owner, frozen, score), and avoid `static`
