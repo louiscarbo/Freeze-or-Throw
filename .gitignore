@@ -90,3 +90,4 @@ InitTestScene*.unity*
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+.vscode/settings.json
