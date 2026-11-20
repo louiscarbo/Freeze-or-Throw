@@ -6,7 +6,7 @@ namespace FreezeOrThrow.Core
 {
     public class MatchState : NetworkBehaviour
     {
-        public const int PlayerCount = Lobby.MaxPlayers;
+        public const int PlayerCount = PlayerList.MaxPlayers;
 
         [SerializeField] double countdownSeconds = 4;
         [SerializeField] double matchDurationSeconds = 420;

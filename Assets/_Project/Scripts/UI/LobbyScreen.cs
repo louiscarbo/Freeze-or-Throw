@@ -18,7 +18,6 @@ namespace FreezeOrThrow.UI
             public TMP_Text nameText;
         }
 
-        [SerializeField] Lobby lobby;
         [SerializeField] string gameSceneName = "Multiplayer-Test";
         [SerializeField] TMP_Text codeText;
         [SerializeField] Button copyCodeButton;
@@ -29,6 +28,7 @@ namespace FreezeOrThrow.UI
         [SerializeField] TMP_Text hostNoteText;
         [SerializeField] Button leaveButton;
 
+        PlayerList playerList;
         string shownCode = "";
         bool shownSpawned;
         bool wasConnected;
@@ -38,16 +38,16 @@ namespace FreezeOrThrow.UI
         {
             wasConnected = false;
             leaving = false;
-            lobby.PlayersChanged += Refresh;
             copyCodeButton.onClick.AddListener(CopyCode);
             startButton.onClick.AddListener(StartMatch);
             leaveButton.onClick.AddListener(Leave);
+            FindPlayerList();
             Refresh();
         }
 
         void OnDisable()
         {
-            lobby.PlayersChanged -= Refresh;
+            ReleasePlayerList();
             copyCodeButton.onClick.RemoveListener(CopyCode);
             startButton.onClick.RemoveListener(StartMatch);
             leaveButton.onClick.RemoveListener(Leave);
@@ -66,11 +66,35 @@ namespace FreezeOrThrow.UI
                 return;
             }
 
-            bool spawned = lobby.IsSpawned;
-            if (spawned != shownSpawned || (spawned && shownCode.Length == 0 && lobby.Code.Length > 0))
+            if (playerList == null)
+            {
+                FindPlayerList();
+            }
+
+            bool spawned = playerList != null && playerList.IsSpawned;
+            if (spawned != shownSpawned || (spawned && shownCode.Length == 0 && playerList.Code.Length > 0))
             {
                 Refresh();
             }
+        }
+
+        void FindPlayerList()
+        {
+            playerList = FindFirstObjectByType<PlayerList>();
+            if (playerList != null)
+            {
+                playerList.PlayersChanged += Refresh;
+            }
+        }
+
+        void ReleasePlayerList()
+        {
+            if (playerList != null)
+            {
+                playerList.PlayersChanged -= Refresh;
+            }
+
+            playerList = null;
         }
 
         bool HasLostConnection()
@@ -97,17 +121,18 @@ namespace FreezeOrThrow.UI
 
         void Refresh()
         {
-            shownCode = lobby.Code;
-            shownSpawned = lobby.IsSpawned;
+            bool spawned = playerList != null && playerList.IsSpawned;
+            shownCode = spawned ? playerList.Code : "";
+            shownSpawned = spawned;
             codeText.text = shownCode;
-            playerCountText.text = $"{lobby.PlayerCount} / {Lobby.MaxPlayers} players";
+            playerCountText.text = $"{(spawned ? playerList.PlayerCount : 0)} / {PlayerList.MaxPlayers} players";
 
-            int hostSlot = lobby.HostSlot;
-            int localSlot = lobby.LocalSlot;
+            int hostSlot = spawned ? playerList.HostSlot : -1;
+            int localSlot = spawned ? playerList.LocalSlot : -1;
             for (int slot = 0; slot < playerCards.Length; slot++)
             {
                 PlayerCard card = playerCards[slot];
-                bool taken = lobby.IsSlotTaken(slot);
+                bool taken = spawned && playerList.IsSlotTaken(slot);
                 card.joinedContent.SetActive(taken);
                 card.joiningContent.SetActive(!taken);
                 card.nameText.text = $"Player {slot + 1}";
@@ -124,7 +149,7 @@ namespace FreezeOrThrow.UI
 
         void CopyCode()
         {
-            GUIUtility.systemCopyBuffer = lobby.Code;
+            GUIUtility.systemCopyBuffer = shownCode;
         }
 
         void StartMatch()

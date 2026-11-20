@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 917744216135877873}
   - component: {fileID: 6837895237950540501}
   - component: {fileID: 1364483495608554850}
+  - component: {fileID: 7248945756996313479}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -106,3 +107,16 @@ MonoBehaviour:
     PacketDelayMS: 0
     PacketJitterMS: 0
     PacketDropRate: 0
+--- !u!114 &7248945756996313479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6836944336592306758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5be949ceff534c129ef92606459e454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FreezeOrThrow.Networking.PlayerListSpawner
+  playerListPrefab: {fileID: 4243347494156053607, guid: 8d90d5127f2294053b9e74aab4530311, type: 3}
