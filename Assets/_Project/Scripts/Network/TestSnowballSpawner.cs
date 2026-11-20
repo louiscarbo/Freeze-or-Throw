@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace FreezeOrThrow.Networking
 {
@@ -15,6 +17,31 @@ namespace FreezeOrThrow.Networking
                 return;
             }
 
+            if (NetworkManager.ConnectedClientsIds.Count > 1)
+            {
+                NetworkManager.SceneManager.OnLoadEventCompleted += SpawnSnowballAfterEveryoneLoaded;
+                return;
+            }
+
+            SpawnSnowball();
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            if (IsServer && NetworkManager != null && NetworkManager.SceneManager != null)
+            {
+                NetworkManager.SceneManager.OnLoadEventCompleted -= SpawnSnowballAfterEveryoneLoaded;
+            }
+        }
+
+        void SpawnSnowballAfterEveryoneLoaded(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+        {
+            NetworkManager.SceneManager.OnLoadEventCompleted -= SpawnSnowballAfterEveryoneLoaded;
+            SpawnSnowball();
+        }
+
+        void SpawnSnowball()
+        {
             Instantiate(snowballPrefab, spawnPosition, Quaternion.identity).Spawn(true);
         }
     }
