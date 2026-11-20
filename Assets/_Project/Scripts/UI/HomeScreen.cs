@@ -1,5 +1,5 @@
+using FreezeOrThrow.Networking;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace FreezeOrThrow.UI
@@ -13,6 +13,7 @@ namespace FreezeOrThrow.UI
         [SerializeField] Button exitButton;
         [SerializeField] ExitDialog exitDialog;
         [SerializeField] string gameSceneName = "Game";
+        [SerializeField] string testHostAddress = "127.0.0.1";
 
         void Awake()
         {
@@ -24,13 +25,12 @@ namespace FreezeOrThrow.UI
 
         void StartGame()
         {
-            SceneManager.LoadScene(gameSceneName);
+            SessionLauncher.Host(gameSceneName);
         }
 
-        // Join needs networking (December) and Options is the next screen to build.
         void OpenJoin()
         {
-            Debug.Log("Join game screen is not built yet.");
+            SessionLauncher.Join(testHostAddress);
         }
 
         void OpenOptions()

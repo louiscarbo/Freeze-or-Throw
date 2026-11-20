@@ -263,7 +263,7 @@ RectTransform:
   - {fileID: 6262311994781141730}
   - {fileID: 2290998280343702281}
   - {fileID: 663043703885447712}
-  - {fileID: 5647849648976710883}
+  - {fileID: 6463268595749027064}
   - {fileID: 5604077059028560519}
   - {fileID: 4137295011758194721}
   - {fileID: 3474907007073535758}
@@ -290,9 +290,10 @@ MonoBehaviour:
   startButton: {fileID: 8121290845970878747}
   joinButton: {fileID: 3245538106287091443}
   optionsButton: {fileID: 8997070848711547564}
-  exitButton: {fileID: 5979822527312749799}
+  exitButton: {fileID: 4985358591457645820}
   exitDialog: {fileID: 1189810865369933918}
-  gameSceneName: Game
+  gameSceneName: Multiplayer-Test
+  testHostAddress: 127.0.0.1
 --- !u!1 &7870410138552033983
 GameObject:
   m_ObjectHideFlags: 0
@@ -853,12 +854,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 954178244efe34df3ae01cfcc171f7b8, type: 3}
---- !u!224 &5647849648976710883 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 7590173423472945440, guid: 954178244efe34df3ae01cfcc171f7b8, type: 3}
-  m_PrefabInstance: {fileID: 3523945800259982808}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &5979822527312749799 stripped
+--- !u!114 &4985358591457645820 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8487067794469257508, guid: 954178244efe34df3ae01cfcc171f7b8, type: 3}
   m_PrefabInstance: {fileID: 3523945800259982808}
@@ -869,6 +865,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!224 &6463268595749027064 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7590173423472945440, guid: 954178244efe34df3ae01cfcc171f7b8, type: 3}
+  m_PrefabInstance: {fileID: 3523945800259982808}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4008849283683951456
 PrefabInstance:
   m_ObjectHideFlags: 0
