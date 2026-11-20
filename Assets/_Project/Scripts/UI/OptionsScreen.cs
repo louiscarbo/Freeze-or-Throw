@@ -9,10 +9,8 @@ namespace FreezeOrThrow.UI
     {
         [SerializeField] Slider musicSlider;
         [SerializeField] Slider soundEffectsSlider;
-        [SerializeField] Slider voiceChatSlider;
         [SerializeField] TMP_Text musicValueText;
         [SerializeField] TMP_Text soundEffectsValueText;
-        [SerializeField] TMP_Text voiceChatValueText;
         [SerializeField] Button fullscreenButton;
         [SerializeField] Button windowedButton;
         [SerializeField] RectTransform windowModeSelector;
@@ -31,15 +29,12 @@ namespace FreezeOrThrow.UI
         {
             musicSlider.SetValueWithoutNotify(Settings.MusicVolume);
             soundEffectsSlider.SetValueWithoutNotify(Settings.SoundEffectsVolume);
-            voiceChatSlider.SetValueWithoutNotify(Settings.VoiceChatVolume);
             ShowPercentage(musicValueText, musicSlider.value);
             ShowPercentage(soundEffectsValueText, soundEffectsSlider.value);
-            ShowPercentage(voiceChatValueText, voiceChatSlider.value);
             ShowWindowMode(Screen.fullScreen);
 
             musicSlider.onValueChanged.AddListener(ChangeMusicVolume);
             soundEffectsSlider.onValueChanged.AddListener(ChangeSoundEffectsVolume);
-            voiceChatSlider.onValueChanged.AddListener(ChangeVoiceChatVolume);
             fullscreenButton.onClick.AddListener(ChooseFullscreen);
             windowedButton.onClick.AddListener(ChooseWindowed);
             backButton.onClick.AddListener(GoBack);
@@ -49,7 +44,6 @@ namespace FreezeOrThrow.UI
         {
             musicSlider.onValueChanged.RemoveListener(ChangeMusicVolume);
             soundEffectsSlider.onValueChanged.RemoveListener(ChangeSoundEffectsVolume);
-            voiceChatSlider.onValueChanged.RemoveListener(ChangeVoiceChatVolume);
             fullscreenButton.onClick.RemoveListener(ChooseFullscreen);
             windowedButton.onClick.RemoveListener(ChooseWindowed);
             backButton.onClick.RemoveListener(GoBack);
@@ -65,12 +59,6 @@ namespace FreezeOrThrow.UI
         {
             Settings.SoundEffectsVolume = volume;
             ShowPercentage(soundEffectsValueText, volume);
-        }
-
-        void ChangeVoiceChatVolume(float volume)
-        {
-            Settings.VoiceChatVolume = volume;
-            ShowPercentage(voiceChatValueText, volume);
         }
 
         void ChooseFullscreen()
