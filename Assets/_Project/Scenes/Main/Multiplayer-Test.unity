@@ -1466,7 +1466,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FreezeOrThrow.Core.MatchState
   ShowTopMostFoldoutHeaderGroup: 1
-  countdownSeconds: 3
+  countdownSeconds: 4
   matchDurationSeconds: 420
 --- !u!114 &1669872683
 MonoBehaviour:

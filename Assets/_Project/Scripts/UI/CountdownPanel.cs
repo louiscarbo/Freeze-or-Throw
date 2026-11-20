@@ -17,7 +17,7 @@ namespace FreezeOrThrow.UI
 
         void Update()
         {
-            int secondsLeft = Mathf.CeilToInt(matchState.CountdownSecondsLeft);
+            int secondsLeft = Mathf.Min(stepPills.Length, Mathf.CeilToInt(matchState.CountdownSecondsLeft));
             if (secondsLeft == shownSeconds)
             {
                 return;

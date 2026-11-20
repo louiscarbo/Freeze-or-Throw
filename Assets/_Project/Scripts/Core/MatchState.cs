@@ -7,7 +7,7 @@ namespace FreezeOrThrow.Core
     {
         public const int PlayerCount = 4;
 
-        [SerializeField] double countdownSeconds = 3;
+        [SerializeField] double countdownSeconds = 4;
         [SerializeField] double matchDurationSeconds = 420;
 
         readonly NetworkVariable<double> startServerTime = new NetworkVariable<double>();
