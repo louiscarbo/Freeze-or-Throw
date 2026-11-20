@@ -54,7 +54,7 @@ Assets/
     Input/         PlayerControls.inputactions
     Prefabs/       Player/  Snowball/  Snowman/  Arena/  Events/  PowerUps/  UI/  Network/
     Scenes/
-      Main/        Menu.unity  Game.unity
+      Main/        Menu.unity  Game.unity  Multiplayer-Test.unity
       Sandbox/     Louis.unity  Daniel.unity  Elise.unity  Onur.unity
     Scripts/       Core/  Player/  Snow/  Arena/  Events/  PowerUps/  Network/  UI/
     Settings/      URP assets, physics materials
@@ -63,6 +63,8 @@ Tools/             Scripts that run outside Unity (e.g. normalize_ui_sprites.py)
 ```
 
 The `.gitkeep` files only exist so git keeps empty folders. Leave them; Unity ignores them.
+
+Scripts (`.cs`) always go under `Scripts/<system>/` and prefabs under `Prefabs/<system>/`, never the other way round. Move assets inside the Unity editor so the `.meta` file follows.
 
 ## 3. Git LFS
 
@@ -142,6 +144,8 @@ Each one is a small public method or event that one person writes and another ca
 | A player fell in the water | Elise (raises) | Daniel, Louis | event `OnPlayerRingOut(player)` |
 | Power-ups affect other systems | Daniel / Elise | Onur | `Snowball.SetOwner(...)`, `SnowField.Freeze(area, seconds)`, `Snowman.SetOwner(...)`, `Snowman.Destroy()` |
 | Player identity and scarf color | Onur | everyone | player id + color (red, blue, green, yellow) |
+| Start, join or leave a match | Louis | Louis (menus), Onur (lobby) | `SessionLauncher.Host(sceneName)`, `SessionLauncher.Join(hostAddress)`, `SessionLauncher.Leave()` |
+| Players appear when the game scene starts | Louis | everyone | `PlayerSpawner` prefab in the game scene (host spawns one player per connected client) |
 
 Every feature is written networked from the start, with no offline version to convert later. Keep input reading
 separate from movement, keep game state in a few clear fields (size, owner, frozen, score), and avoid `static`
@@ -154,15 +158,26 @@ Local network only: no internet play, no Unity Cloud, and if the host leaves, th
 
 ## 8. Scenes
 
-Only two real scenes. The 7 GDD screens are UI panels, not scenes.
+Two real scenes plus one temporary one. The 7 GDD screens are UI panels, not scenes.
 
 | Scene | Contains | Owner |
 |---|---|---|
 | `Scenes/Main/Menu.unity` | Home, Options, Join, Lobby (panels shown/hidden) | Louis |
 | `Scenes/Main/Game.unity` | Island, players, snowballs + Countdown, HUD, Rankings as UI prefabs | Elise (scene), Louis (UI prefabs) |
+| `Scenes/Main/Multiplayer-Test.unity` | Temporary playable arena. The menu's Start button loads it until `Game.unity` has the island; then it is deleted | Onur |
 | `Scenes/Sandbox/<Name>.unity` | Anything | each person |
 
-Build order (File → Build Profiles → Scene List): `Menu` first, then `Game`.
+Build order (File → Build Profiles → Scene List): `Menu` first, then `Game`, then `Multiplayer-Test`.
+
+### How a match starts
+
+- There is exactly one `NetworkManager`: the prefab `Prefabs/Network/NetworkManager.prefab`, placed only in `Menu.unity`. Never add a `NetworkManager` to another scene.
+- It has no player prefab set. The `PlayerSpawner` prefab in the game scene spawns the players on the host, so a player never exists in the menu.
+- Start on the Home screen calls `SessionLauncher.Host`, which starts the host and loads the game scene through NGO's scene manager, so joined clients follow automatically. Never call Unity's `SceneManager.LoadScene` to enter a game scene.
+- To press Play directly in a game or sandbox scene, drop the `Prefabs/Network/DevBootstrap.prefab` and `Prefabs/Network/PlayerSpawner.prefab` prefabs into it: with no session running, `DevBootstrap` creates the `NetworkManager` and hosts alone.
+- To test with two players on one machine (Multiplayer Play Mode or two builds), start from `Menu.unity`: one presses Start, the other presses Join. Until the Join screen exists, Join connects to `127.0.0.1`.
+- Scene objects that need networking (snow field, spawners) are placed in the scene with a `NetworkObject`. Things created during play (players, snowballs) are prefabs registered in `Assets/DefaultNetworkPrefabs.asset` and spawned by the host.
+- `TestSnowballSpawner` in `Multiplayer-Test` is temporary: remove it once the Create input spawns snowballs.
 
 ## 9. UI conventions
 
