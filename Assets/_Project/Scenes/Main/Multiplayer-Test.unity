@@ -1466,7 +1466,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FreezeOrThrow.Core.MatchState
   ShowTopMostFoldoutHeaderGroup: 1
-  countdownSeconds: 4
+  countdownSeconds: 3
   matchDurationSeconds: 420
 --- !u!114 &1669872683
 MonoBehaviour:
@@ -1706,6 +1706,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2171665341450265944, guid: 8f26327b070984efbbddafaf301cd028, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 2326734406144185917, guid: 8f26327b070984efbbddafaf301cd028, type: 3}
       propertyPath: m_Name
       value: UiCanvas
