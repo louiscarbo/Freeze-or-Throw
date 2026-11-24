@@ -52,6 +52,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FreezeOrThrow.UI.Hud
   matchState: {fileID: 0}
   timerText: {fileID: 7656586220911114600}
+  timer: {fileID: 7557251001447115988}
+  timerPlank: {fileID: 859140613323716542}
+  hurryPlankSprite: {fileID: 21300000, guid: e24f8aa29371e45d0afa5cebabf2a082, type: 3}
+  hurryTimerMaterial: {fileID: 2100000, guid: 2a9b1f33be656486fb552a99626191fa, type: 2}
   tiles:
   - normalLook: {fileID: 1021828457115694245}
     youLook: {fileID: 3267396408717957099}
