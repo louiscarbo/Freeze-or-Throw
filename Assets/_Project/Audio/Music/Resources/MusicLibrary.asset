@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb5d0879830e4c9dbaafe5684855095, type: 3}
+  m_Name: MusicLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::FreezeOrThrow.Music.MusicLibrary
+  menuTrack: {fileID: 8300000, guid: 62080b679575b4502b3947d2308f2dbe, type: 3}
+  arenaTrack: {fileID: 8300000, guid: 4b6b4b2702ed54ee4b460bb8b9bec71d, type: 3}
