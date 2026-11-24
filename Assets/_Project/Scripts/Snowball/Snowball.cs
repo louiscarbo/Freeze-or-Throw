@@ -10,8 +10,7 @@ public class Snowball : NetworkBehaviour
     [SerializeField] private float snowCollectRate = 25f;
     [SerializeField] private float snowToSizeRatio = 0.02f;
 
-    [Header("Grab & Follow Settings")]
-    [SerializeField] private float grabRange = 2.2f;          // Auto-grabs nearest snowball within this range when entering RollingSnowball
+    [Header("Follow Settings")]
     [SerializeField] private float holdDistancePadding = 0.75f; // Extra spacing between player and snowball surface
     [SerializeField] private float followSmoothSpeed = 25f;
 
@@ -60,33 +59,45 @@ public class Snowball : NetworkBehaviour
         networkSize.OnValueChanged -= OnSizeChanged;
     }
 
+    public bool TryAssignHolder(PlayerMovement player)
+    {
+        if (!IsServer || _holder != null || player == null) return false;
+
+        _holder = player;
+        _lastPosition = transform.position;
+        return true;
+    }
+
+    public void ReleaseHolder(PlayerMovement player)
+    {
+        if (!IsServer || _holder != player) return;
+
+        _holder = null;
+        isCollectingSnow = false;
+        if (_rb != null)
+        {
+            _rb.linearVelocity = new Vector3(0f, _rb.linearVelocity.y, 0f);
+            _rb.angularVelocity = Vector3.zero;
+        }
+        _lastPosition = transform.position;
+    }
+
     private void FixedUpdate()
     {
         if (!IsServer || _rb == null) return;
 
-        // 1. If nobody is holding this snowball, check if a nearby player just entered RollingSnowball mode
         if (_holder == null)
         {
-            TryFindNearbyGrabber();
-        }
-
-        // 2. Release if the holder exited RollingSnowball mode or disconnected
-        if (_holder == null || !_holder.IsRollingSnowball)
-        {
-            _holder = null;
             isCollectingSnow = false;
-            _rb.linearVelocity = new Vector3(0f, _rb.linearVelocity.y, 0f);
-            _rb.angularVelocity = Vector3.zero;
-            _lastPosition = transform.position;
             return;
         }
 
-        // 3. Position the snowball directly in front of the player (scales out as the ball grows)
+        // Position snowball directly in front of player (scales out as the ball grows)
         float radius = networkSize.Value * 0.5f;
         float distanceInFront = radius + holdDistancePadding;
 
         Vector3 targetPos = _holder.transform.position + (_holder.transform.forward * distanceInFront);
-        targetPos.y = Mathf.Max(transform.position.y, radius); // Keep resting on the ground as it scales up
+        targetPos.y = radius;   // rest on the ground plane at y = 0
 
         Vector3 nextPos = Vector3.Lerp(_rb.position, targetPos, followSmoothSpeed * Time.fixedDeltaTime);
         Vector3 frameDisplacement = nextPos - _lastPosition;
@@ -106,7 +117,7 @@ public class Snowball : NetworkBehaviour
 
         _lastPosition = nextPos;
 
-        // 4. Collect snow from the ground only while the player is actively moving the grabbed ball
+        // Collect snow from the ground only while the player is actively moving the grabbed ball
         if (IsFull || SnowGridManager.Instance == null || distanceMoved <= 0.002f)
         {
             isCollectingSnow = false;
@@ -129,64 +140,6 @@ public class Snowball : NetworkBehaviour
             {
                 hasPrintedFull = true;
                 Debug.Log("I AM FULL");
-            }
-        }
-    }
-
-    private void TryFindNearbyGrabber()
-    {
-        float radius = networkSize.Value * 0.5f;
-        Collider[] hits = Physics.OverlapSphere(transform.position, radius + grabRange);
-
-        float closestDist = float.MaxValue;
-        PlayerMovement bestPlayer = null;
-
-        foreach (var hit in hits)
-        {
-            if (hit.TryGetComponent<PlayerMovement>(out var player) && player.IsRollingSnowball)
-            {
-                // Make sure this player isn't already holding a different snowball
-                if (IsPlayerAlreadyHoldingAnotherBall(player)) continue;
-
-                float dist = Vector3.Distance(transform.position, player.transform.position);
-                if (dist < closestDist)
-                {
-                    closestDist = dist;
-                    bestPlayer = player;
-                }
-            }
-        }
-
-        if (bestPlayer != null)
-        {
-            _holder = bestPlayer;
-            _lastPosition = transform.position;
-        }
-    }
-
-    private bool IsPlayerAlreadyHoldingAnotherBall(PlayerMovement player)
-    {
-        Snowball[] allBalls = FindObjectsByType<Snowball>(FindObjectsSortMode.None);
-        foreach (var ball in allBalls)
-        {
-            if (ball != this && ball._holder == player)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        if (!IsServer || _holder != null) return;
-
-        if (collision.gameObject.TryGetComponent<PlayerMovement>(out var player) && player.IsRollingSnowball)
-        {
-            if (!IsPlayerAlreadyHoldingAnotherBall(player))
-            {
-                _holder = player;
-                _lastPosition = transform.position;
             }
         }
     }
@@ -215,4 +168,64 @@ public class Snowball : NetworkBehaviour
         Vector3 groundPoint = transform.position - Vector3.up * (transform.localScale.y * 0.5f);
         Gizmos.DrawWireSphere(groundPoint, 0.35f);
     }
+
+    // DEPRECATED v
+
+    // private void OnCollisionStay(Collision collision)
+    // {
+    //     if (!IsServer || _holder != null) return;
+
+    //     if (collision.gameObject.TryGetComponent<PlayerMovement>(out var player) && player.IsRollingSnowball)
+    //     {
+    //         if (!IsPlayerAlreadyHoldingAnotherBall(player))
+    //         {
+    //             _holder = player;
+    //             _lastPosition = transform.position;
+    //         }
+    //     }
+    // }
+
+    // private void TryFindNearbyGrabber()
+    // {
+    //     float radius = networkSize.Value * 0.5f;
+    //     Collider[] hits = Physics.OverlapSphere(transform.position, radius + grabRange);
+
+    //     float closestDist = float.MaxValue;
+    //     PlayerMovement bestPlayer = null;
+
+    //     foreach (var hit in hits)
+    //     {
+    //         if (hit.TryGetComponent<PlayerMovement>(out var player) && player.IsRollingSnowball)
+    //         {
+    //             // Make sure this player isn't already holding a different snowball
+    //             if (IsPlayerAlreadyHoldingAnotherBall(player)) continue;
+
+    //             float dist = Vector3.Distance(transform.position, player.transform.position);
+    //             if (dist < closestDist)
+    //             {
+    //                 closestDist = dist;
+    //                 bestPlayer = player;
+    //             }
+    //         }
+    //     }
+
+    //     if (bestPlayer != null)
+    //     {
+    //         _holder = bestPlayer;
+    //         _lastPosition = transform.position;
+    //     }
+    // }
+
+    // private bool IsPlayerAlreadyHoldingAnotherBall(PlayerMovement player)
+    // {
+    //     Snowball[] allBalls = FindObjectsByType<Snowball>(FindObjectsSortMode.None);
+    //     foreach (var ball in allBalls)
+    //     {
+    //         if (ball != this && ball._holder == player)
+    //         {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
 }

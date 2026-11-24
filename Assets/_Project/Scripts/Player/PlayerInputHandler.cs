@@ -1,8 +1,5 @@
-using System.ComponentModel.Design;
-using System.Runtime.InteropServices;
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public enum PlayerState
 {
@@ -16,61 +13,39 @@ public class PlayerInputHandler : MonoBehaviour
     private PlayerControls controls;
     public PlayerState currentState { get; private set; } = PlayerState.EmptyHanded;
 
+    //IMP: events for PlayerMovement and interaction script to subscribe to
+    public event Action OnGrabDropPressed;
+    public event Action OnCreatePressed;
+    public event Action OnPushThrowPressed;
+
     // standard inputs
-    public Vector2 standardMoveInput {get; private set; }
-    public Vector2 aimPosition { get; private set; }
+    public Vector2 standardMoveInput => controls != null && controls.Standard.enabled
+        ? controls.Standard.Move.ReadValue<Vector2>() : Vector2.zero;
+    public Vector2 aimPosition => controls != null && controls.Standard.enabled
+        ? controls.Standard.Aim.ReadValue<Vector2>() : Vector2.zero;
 
     // rolling inputs
-    public Vector2 tankMoveInput { get; private set; }
+    public Vector2 tankMoveInput => controls != null && controls.Rolling.enabled
+        ? controls.Rolling.TankMove.ReadValue<Vector2>() : Vector2.zero;
 
     private void Awake()
     {
         controls = new PlayerControls();
 
         // STANDARD MAP BINDINGS
-        controls.Standard.Move.performed += ctx =>
-        {
-            standardMoveInput = ctx.ReadValue<Vector2>();
-
-            if (currentState == PlayerState.HoldingFreshSnowball && standardMoveInput.sqrMagnitude > 0.1f)
-            {
-                SetState(PlayerState.RollingSnowball);
-            }
-        };
-        controls.Standard.Move.canceled += ctx => standardMoveInput = Vector2.zero;
-        controls.Standard.Aim.performed += ctx => aimPosition = ctx.ReadValue<Vector2>();
-
-        controls.Standard.Create.performed += ctx =>
-        {
-            if (currentState == PlayerState.EmptyHanded)
-            {
-                // TODO: Instantiate snowball
-                SetState(PlayerState.HoldingFreshSnowball);
-            }
-        };
-
-        controls.Standard.GrabDrop.performed += ctx => HandleStandardGrabDrop();
-        controls.Standard.PushThrow.performed += ctx => HandleStandardPush();
+        controls.Standard.Create.performed += _ => OnCreatePressed?.Invoke();
+        controls.Standard.GrabDrop.performed += _ => OnGrabDropPressed?.Invoke();
+        controls.Standard.PushThrow.performed += _ => OnPushThrowPressed?.Invoke();
 
         // ROLLING MAP BINDINGS
-        controls.Rolling.TankMove.performed += ctx => tankMoveInput = ctx.ReadValue<Vector2>();
-        controls.Rolling.TankMove.canceled += ctx => tankMoveInput = Vector2.zero;
-
-        controls.Rolling.Drop.performed += ctx =>
-        {
-            // TODO: Drop snowball on ground logic
-            SetState(PlayerState.EmptyHanded);
-        };
-
-        controls.Rolling.ThrowForward.performed += ctx =>
-        {
-            // TODO: Push snowball forward logic
-            SetState(PlayerState.EmptyHanded);
-        };
+        controls.Rolling.Drop.performed += _ => OnGrabDropPressed?.Invoke();
+        controls.Rolling.ThrowForward.performed += _ => OnPushThrowPressed?.Invoke();
     }
 
-    private void SetState(PlayerState newState)
+    public void SetState(PlayerState newState)
     {
+        if (currentState == newState) return;
+
         currentState = newState;
         Debug.Log($"Player State changed to: {newState}");
 
@@ -82,30 +57,6 @@ public class PlayerInputHandler : MonoBehaviour
         {
             controls.Standard.Enable();
             controls.Rolling.Disable();
-        }
-    }
-
-    private void HandleStandardGrabDrop()
-    {
-        if (currentState == PlayerState.EmptyHanded)
-        {
-            // TODO: Grab nearby snowball logic
-            // If successful: SetState(PlayerState.RollingSnowball);
-        } else if (currentState == PlayerState.HoldingFreshSnowball)
-        {
-            // TODO: Destroy snowball logic
-            SetState(PlayerState.EmptyHanded);
-        }
-    }
-    private void HandleStandardPush()
-    {
-        if (currentState == PlayerState.EmptyHanded)
-        {
-            // TODO: Push player/object logic
-        } else if (currentState == PlayerState.HoldingFreshSnowball)
-        {
-            // TODO: Throw snowball at AimPosition logic
-            SetState(PlayerState.EmptyHanded);
         }
     }
 
