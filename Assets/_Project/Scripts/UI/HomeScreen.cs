@@ -12,8 +12,7 @@ namespace FreezeOrThrow.UI
         [SerializeField] Button optionsButton;
         [SerializeField] Button exitButton;
         [SerializeField] ExitDialog exitDialog;
-        [SerializeField] string gameSceneName = "Game";
-        [SerializeField] string testHostAddress = "127.0.0.1";
+        [SerializeField] MenuScreens menuScreens;
 
         void Awake()
         {
@@ -25,17 +24,20 @@ namespace FreezeOrThrow.UI
 
         void StartGame()
         {
-            SessionLauncher.Host(gameSceneName);
+            if (SessionLauncher.Host())
+            {
+                menuScreens.ShowLobby();
+            }
         }
 
         void OpenJoin()
         {
-            SessionLauncher.Join(testHostAddress);
+            menuScreens.ShowJoin();
         }
 
         void OpenOptions()
         {
-            Debug.Log("Options screen is not built yet.");
+            menuScreens.ShowOptions();
         }
     }
 }

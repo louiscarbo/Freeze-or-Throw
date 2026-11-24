@@ -9,15 +9,19 @@ namespace FreezeOrThrow.Networking
     {
         const string MenuSceneName = "Menu";
 
-        public static bool Host(string gameSceneName)
+        public static bool Host()
         {
-            if (!NetworkManager.Singleton.StartHost())
+            return NetworkManager.Singleton.StartHost();
+        }
+
+        public static void StartMatch(string gameSceneName)
+        {
+            if (!NetworkManager.Singleton.IsServer)
             {
-                return false;
+                return;
             }
 
             NetworkManager.Singleton.SceneManager.LoadScene(gameSceneName, LoadSceneMode.Single);
-            return true;
         }
 
         public static bool Join(string hostAddress)

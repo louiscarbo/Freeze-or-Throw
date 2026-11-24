@@ -144,9 +144,12 @@ Each one is a small public method or event that one person writes and another ca
 | A player fell in the water | Elise (raises) | Daniel, Louis | event `OnPlayerRingOut(player)` |
 | Power-ups affect other systems | Daniel / Elise | Onur | `Snowball.SetOwner(...)`, `SnowField.Freeze(area, seconds)`, `Snowman.SetOwner(...)`, `Snowman.Destroy()` |
 | Player identity and scarf color | Onur | everyone | player id + color (red, blue, green, yellow) |
-| Start, join or leave a match | Louis | Louis (menus), Onur (lobby) | `SessionLauncher.Host(sceneName)`, `SessionLauncher.Join(hostAddress)`, `SessionLauncher.Leave()` |
+| Start, join or leave a match | Louis | Louis (menus), Onur (lobby) | `SessionLauncher.Host()` (starts the host, stays in the menu), `SessionLauncher.StartMatch(sceneName)` (host only, loads the game scene for everyone), `SessionLauncher.Join(hostAddress)`, `SessionLauncher.Leave()` |
+| Game code to join | Louis | Louis (Join and Lobby screens) | `GameCode.Encode(hostAddress)`, `GameCode.TryDecode(code, localAddress, out hostAddress)`, `GameCode.LocalAddress()`, `GameCode.IsValidSymbol(symbol)` |
+| Who is which player, for the whole session | Louis (for now) | Lobby screen, HUD "you" tile, Onur's player identity | One `PlayerList` (find it with `FindFirstObjectByType<PlayerList>()`; it only exists once hosting or joining has started): `PlayerList.PlayerCount`, `PlayerList.IsSlotTaken(playerSlot)`, `PlayerList.SlotOf(clientId)`, `PlayerList.LocalSlot`, `PlayerList.HostSlot`, `PlayerList.Code`, event `PlayersChanged`. A slot (0 to 3: red, blue, green, yellow) is a player's position in join order (host first). In the lobby a leaver closes the gap; once the match has started slots never move, a leaver just frees theirs and a newcomer takes the first free one |
 | Players appear when the game scene starts | Louis | everyone | `PlayerSpawner` prefab in the game scene (host spawns one player per connected client) |
 | Time left and scores | Louis | Louis (HUD, Rankings) | `MatchState.SecondsLeft`, `MatchState.HasEnded`, `MatchState.ScoreOf(playerSlot)`, `MatchState.CountdownSecondsLeft`, `MatchState.IsPlaying`, `MatchState.RankOf(playerSlot)`, event `ScoresChanged` |
+| Device settings (volumes) | Louis | Louis (Options), whoever adds sound | `Settings.MusicVolume`, `Settings.SoundEffectsVolume` (0 to 1, saved on the device, never networked) |
 
 Dependencies point one way: **screens → match → world**. Screens (menus, HUD) read `MatchState` and call `SessionLauncher`.
 The match (`MatchState`, `PlayerSpawner`) spawns into the world and listens to its events. The world (player, snowball,
@@ -179,9 +182,11 @@ Build order (File → Build Profiles → Scene List): `Menu` first, then `Game`,
 
 - There is exactly one `NetworkManager`: the prefab `Prefabs/Network/NetworkManager.prefab`, placed only in `Menu.unity`. Never add a `NetworkManager` to another scene.
 - It has no player prefab set. The `PlayerSpawner` prefab in the game scene spawns the players on the host, so a player never exists in the menu.
-- Start on the Home screen calls `SessionLauncher.Host`, which starts the host and loads the game scene through NGO's scene manager, so joined clients follow automatically. Never call Unity's `SceneManager.LoadScene` to enter a game scene.
+- Flow: Home, then Lobby, then the arena. **Start game** on Home calls `SessionLauncher.Host()`, which starts the host and opens the Lobby screen without leaving `Menu.unity`. **Join game** opens the Join screen: the player types the game code, `SessionLauncher.Join` connects, and the Lobby screen opens once connected (after 5 seconds without a connection, an error shows).
+- The game code is the host's local network address packed into 5 symbols (the first number of the address is taken from the joining device, so it only works on the same Wi-Fi). The host's Lobby shows it. No internet, no server.
+- The `PlayerList` (prefab `Prefabs/Network/PlayerList.prefab`, spawned by the host through `PlayerListSpawner` on the `NetworkManager` prefab, kept alive across the scene change) holds the 4 player slots and the code for the whole session, in the lobby and in the match; the host fills it as players connect or leave. When the host presses **Start game** in the Lobby (1 to 4 players), `SessionLauncher.StartMatch` loads the game scene through NGO's scene manager, so joined clients follow automatically. Never call Unity's `SceneManager.LoadScene` to enter a game scene.
 - To press Play directly in a game or sandbox scene, drop the `Prefabs/Network/DevBootstrap.prefab` and `Prefabs/Network/PlayerSpawner.prefab` prefabs into it: with no session running, `DevBootstrap` creates the `NetworkManager` and hosts alone.
-- To test with two players on one machine (Multiplayer Play Mode or two builds), start from `Menu.unity`: one presses Start, the other presses Join. Until the Join screen exists, Join connects to `127.0.0.1`.
+- To test with two players on one machine (Multiplayer Play Mode or two builds), start from `Menu.unity`: one presses Start, the other presses Join and types the code shown in the Lobby.
 - Scene objects that need networking (snow field, spawners) are placed in the scene with a `NetworkObject`. Things created during play (players, snowballs) are prefabs registered in `Assets/DefaultNetworkPrefabs.asset` and spawned by the host.
 - `TestSnowballSpawner` in `Multiplayer-Test` is temporary: remove it once the Create input spawns snowballs.
 

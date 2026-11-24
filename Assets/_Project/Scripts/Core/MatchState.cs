@@ -1,3 +1,4 @@
+using FreezeOrThrow.Networking;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ namespace FreezeOrThrow.Core
 {
     public class MatchState : NetworkBehaviour
     {
-        public const int PlayerCount = 4;
+        public const int PlayerCount = PlayerList.MaxPlayers;
 
         [SerializeField] double countdownSeconds = 4;
         [SerializeField] double matchDurationSeconds = 420;
