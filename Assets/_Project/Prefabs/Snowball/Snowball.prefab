@@ -45,7 +45,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1794271930143999187}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 6412789792913239489, guid: 89988c9a6d2464990b1bc8897dc81395, type: 3}
 --- !u!23 &5332092946426123615
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -71,7 +71,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 39a9cf996eb144845bf11be2fab3cbf0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -155,14 +155,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4272092535
+  GlobalObjectIdHash: 2343302907
   InScenePlacedSourceGlobalObjectIdHash: 0
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
-  m_InScenePlaced: 1
+  m_InScenePlaced: 0
   ActiveSceneSynchronization: 0
   SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
@@ -187,6 +187,10 @@ MonoBehaviour:
   maxSize: 10
   snowCollectRate: 25
   snowToSizeRatio: 0.02
+  grabRange: 2.2
+  holdDistancePadding: 0.75
+  followSmoothSpeed: 25
+  showSnowCheckGizmo: 1
 --- !u!114 &1904552582481729815
 MonoBehaviour:
   m_ObjectHideFlags: 0
