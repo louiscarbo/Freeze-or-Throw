@@ -55,5 +55,49 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 070de2788d0364a03b35c5d628c09850, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8085569836895443579}
   m_SourcePrefab: {fileID: 100100000, guid: 070de2788d0364a03b35c5d628c09850, type: 3}
+--- !u!1 &415188194146596671 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 070de2788d0364a03b35c5d628c09850, type: 3}
+  m_PrefabInstance: {fileID: 649189768361806446}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8085569836895443579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 415188194146596671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15388a3e1a98341f1abdc471fafb9d21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FreezeOrThrow.Visuals.PlayerColourTint
+  tintedRenderers:
+  - {fileID: 2505604858213506491}
+  - {fileID: 5475705287243343317}
+  - {fileID: 4421658431059016177}
+  slotColours:
+  - {r: 0.7882353, g: 0.27450982, b: 0.23921569, a: 1}
+  - {r: 0.24313726, g: 0.35686275, b: 0.6627451, a: 1}
+  - {r: 0.30588236, g: 0.6039216, b: 0.35686275, a: 1}
+  - {r: 0.9098039, g: 0.7137255, b: 0.22745098, a: 1}
+--- !u!23 &2505604858213506491 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3154719795325769685, guid: 070de2788d0364a03b35c5d628c09850, type: 3}
+  m_PrefabInstance: {fileID: 649189768361806446}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &4421658431059016177 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3773594606426665887, guid: 070de2788d0364a03b35c5d628c09850, type: 3}
+  m_PrefabInstance: {fileID: 649189768361806446}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &5475705287243343317 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4827856970412732347, guid: 070de2788d0364a03b35c5d628c09850, type: 3}
+  m_PrefabInstance: {fileID: 649189768361806446}
+  m_PrefabAsset: {fileID: 0}
