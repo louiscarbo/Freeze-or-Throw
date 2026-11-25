@@ -183,10 +183,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Snowball
   ShowTopMostFoldoutHeaderGroup: 1
-  minSize: 1
-  maxSize: 10
+  minSize: 0.3
+  maxSize: 1.28
   snowCollectRate: 25
-  snowToSizeRatio: 0.02
+  snowToSizeRatio: 0.00218
   grabRange: 2.2
   holdDistancePadding: 0.75
   followSmoothSpeed: 25
