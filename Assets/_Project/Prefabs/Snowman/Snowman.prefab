@@ -55,5 +55,87 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 38e6e8adf0e134ed4a7dbc6fde6c7784, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1493229165859293003}
   m_SourcePrefab: {fileID: 100100000, guid: 38e6e8adf0e134ed4a7dbc6fde6c7784, type: 3}
+--- !u!1 &1023169075725771681 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 38e6e8adf0e134ed4a7dbc6fde6c7784, type: 3}
+  m_PrefabInstance: {fileID: 212354227954097904}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1493229165859293003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023169075725771681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d8184b2c91ad4051beec00f39577e3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FreezeOrThrow.Visuals.SnowmanPopIn
+  bodyPieces:
+  - {fileID: 1676895078532200955}
+  - {fileID: 4649364969520285372}
+  headPieces:
+  - {fileID: 3026839299231755172}
+  - {fileID: 5514439366515043851}
+  detailPieces:
+  - {fileID: 4478760164829477068}
+  - {fileID: 3986314058239656414}
+  - {fileID: 7788835045118689343}
+  - {fileID: 2793229685836834500}
+  - {fileID: 4068593892241624418}
+  pieceDuration: 0.42
+  headDelay: 0.14
+  detailDelay: 0.32
+  detailStagger: 0.05
+  overshoot: 1.9
+--- !u!4 &1676895078532200955 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -7658397297289287925, guid: 38e6e8adf0e134ed4a7dbc6fde6c7784, type: 3}
+  m_PrefabInstance: {fileID: 212354227954097904}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2793229685836834500 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -6615255061048002508, guid: 38e6e8adf0e134ed4a7dbc6fde6c7784, type: 3}
+  m_PrefabInstance: {fileID: 212354227954097904}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3026839299231755172 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -6272650864370436780, guid: 38e6e8adf0e134ed4a7dbc6fde6c7784, type: 3}
+  m_PrefabInstance: {fileID: 212354227954097904}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3986314058239656414 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -5359190611611820242, guid: 38e6e8adf0e134ed4a7dbc6fde6c7784, type: 3}
+  m_PrefabInstance: {fileID: 212354227954097904}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4068593892241624418 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4216745415139349394, guid: 38e6e8adf0e134ed4a7dbc6fde6c7784, type: 3}
+  m_PrefabInstance: {fileID: 212354227954097904}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4478760164829477068 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4839769086821587396, guid: 38e6e8adf0e134ed4a7dbc6fde6c7784, type: 3}
+  m_PrefabInstance: {fileID: 212354227954097904}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4649364969520285372 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4789494391660566604, guid: 38e6e8adf0e134ed4a7dbc6fde6c7784, type: 3}
+  m_PrefabInstance: {fileID: 212354227954097904}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5514439366515043851 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5653519914247303419, guid: 38e6e8adf0e134ed4a7dbc6fde6c7784, type: 3}
+  m_PrefabInstance: {fileID: 212354227954097904}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7788835045118689343 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7991056169003671247, guid: 38e6e8adf0e134ed4a7dbc6fde6c7784, type: 3}
+  m_PrefabInstance: {fileID: 212354227954097904}
+  m_PrefabAsset: {fileID: 0}

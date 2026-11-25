@@ -59,6 +59,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 070de2788d0364a03b35c5d628c09850, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8085569836895443579}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 070de2788d0364a03b35c5d628c09850, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6415733082120323095}
   m_SourcePrefab: {fileID: 100100000, guid: 070de2788d0364a03b35c5d628c09850, type: 3}
 --- !u!1 &415188194146596671 stripped
 GameObject:
@@ -86,9 +89,58 @@ MonoBehaviour:
   - {r: 0.24313726, g: 0.35686275, b: 0.6627451, a: 1}
   - {r: 0.30588236, g: 0.6039216, b: 0.35686275, a: 1}
   - {r: 0.9098039, g: 0.7137255, b: 0.22745098, a: 1}
+--- !u!114 &6415733082120323095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 415188194146596671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9be33bce998674abf8c32a26ff30aa78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FreezeOrThrow.Visuals.PlayerVisualAnimator
+  hat: {fileID: 7631464213440770029}
+  scarfTail: {fileID: 4369114168025077056}
+  hatPivot: {x: 0, y: 1.072, z: 0}
+  scarfTailPivot: {x: -0.189, y: 0.845, z: 0.303}
+  referenceSpeed: 6
+  velocitySmoothTime: 0.07
+  teleportDistance: 3
+  glideBetweenPhysicsSteps: 1
+  stepLength: 1.8
+  hopHeight: 0.1
+  waddleDegrees: 6
+  landingSquash: 0.05
+  hopStretch: 0.03
+  baseRadius: 0.32
+  leanDegrees: 6
+  maximumLeanDegrees: 10
+  leanFrequency: 2.1
+  leanDamping: 0.25
+  hatLagFactor: 1.3
+  maximumHatDegrees: 4
+  hatFrequency: 3.2
+  hatDamping: 0.35
+  tailTrailDegrees: 14
+  tailHopFlapDegrees: 7
+  tailInertiaDegrees: 0.35
+  maximumTailDegrees: 32
+  tailInwardLimitDegrees: 3
+  tailFrequency: 1.9
+  tailDamping: 0.22
+  idleBobHeight: 0.02
+  idleBobPeriod: 2.6
+  modelHeight: 1.59
 --- !u!23 &2505604858213506491 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 3154719795325769685, guid: 070de2788d0364a03b35c5d628c09850, type: 3}
+  m_PrefabInstance: {fileID: 649189768361806446}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4369114168025077056 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -5359190611611820242, guid: 070de2788d0364a03b35c5d628c09850, type: 3}
   m_PrefabInstance: {fileID: 649189768361806446}
   m_PrefabAsset: {fileID: 0}
 --- !u!23 &4421658431059016177 stripped
@@ -99,5 +151,10 @@ MeshRenderer:
 --- !u!23 &5475705287243343317 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 4827856970412732347, guid: 070de2788d0364a03b35c5d628c09850, type: 3}
+  m_PrefabInstance: {fileID: 649189768361806446}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7631464213440770029 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -2239965893361130109, guid: 070de2788d0364a03b35c5d628c09850, type: 3}
   m_PrefabInstance: {fileID: 649189768361806446}
   m_PrefabAsset: {fileID: 0}
